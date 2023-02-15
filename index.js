@@ -59,6 +59,7 @@ try {
 
     console.log('Configuring deployment key(s)');
 
+    var keymap = {};
     child_process.execFileSync(sshAddCmd, ['-L']).toString().trim().split(/\r?\n/).forEach(function(key) {
         const parts = key.match(/\b([\w.]+)[:/]([_.a-z0-9-]+\/[_.a-z0-9-]+)$/i);
 
@@ -86,8 +87,11 @@ try {
 
         fs.appendFileSync(`${homeSsh}/config`, sshConfig);
 
+        keymap[`git@${githubHost}:${ownerAndRepo}`] = `git@key-${sha256}.${githubHost}:${ownerAndRepo}`;
         console.log(`Added deploy-key mapping: Use identity '${homeSsh}/key-${sha256}' for GitHub repository ${ownerAndRepo}`);
     });
+
+    core.setOutput("deploy-key-map", keymap);
 
 } catch (error) {
 

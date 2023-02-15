@@ -19,6 +19,9 @@ inputs:
     git-cmd:
         description: 'git command'
         required: false
+outputs:
+    deploy-key-map:
+        description: 'Key-Value pairs of the original GitHub deploy key repo to the new mapping'
 runs:
     using: 'node16'
     main: 'dist/index.js'
